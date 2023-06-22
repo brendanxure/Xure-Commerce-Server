@@ -1,5 +1,5 @@
 const { responsecodes } = require("../Constant/ResponseCode")
-const { findEmail, findUsername } = require("../Service/UserService")
+const { findEmail, findUsername, createUser } = require("../Service/UserService")
 const bcrypt = require('bcryptjs')
 
 const Register = async( req, res) => {
@@ -34,4 +34,21 @@ const Register = async( req, res) => {
 
     //hash password
     const salt = await bcrypt.genSalt(10)
+    const hashedPassword = await bcrypt.hash(password, salt)
+
+    //create user
+    const newUser = await createUser(email, username, hashedPassword)
+    if (newUser){
+        if(newUser.success) {
+            res.status(newUser.code).json(newUser.data)
+        } else {
+            res.status(newUser.code).json(newUser.data)
+        }
+    } else {
+        res.status(responsecodes.INTERNAL_SERVER_ERROR).json(`Error: User couldn't be created`)
+    }
+}
+
+module.exports = {
+    Register
 }

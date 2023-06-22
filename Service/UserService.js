@@ -25,7 +25,21 @@ const findUsername = async(username)=> {
     }
 }
 
+const createUser = async(email, username, hashedPassword) => {
+    try {
+        const newUser = await User.create({
+            email: email.trim(),
+            username: username.trim(),
+            password: hashedPassword
+        })
+        return { code: responsecodes.SUCCESS, success: true, data: newUser}
+    } catch (error) {
+        return {code: responsecodes.INTERNAL_SERVER_ERROR, success: false, data: error}
+    }
+}
+
 module.exports = {
     findEmail,
-    findUsername
+    findUsername,
+    createUser
 }
