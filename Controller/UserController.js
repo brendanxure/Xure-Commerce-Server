@@ -1,6 +1,7 @@
 const { responsecodes } = require("../Constant/ResponseCode")
 const { findEmail, findUsername, createUser } = require("../Service/UserService")
 const bcrypt = require('bcryptjs')
+const jwt = require('jsonwebtoken')
 
 const Register = async( req, res) => {
     const {email, username, password} = req.body
@@ -51,8 +52,40 @@ const Register = async( req, res) => {
 
 const Login = async(req, res) => {
     const {email, password} = req.body
+
+    //no  email 
+    if(!email) {
+        res.status(responsecodes.BAD_REQUEST).json('Please input email')
+    }
+
+    //no password
+    if(!password){
+        res.status(responsecodes.BAD_REQUEST).json('Please input password')
+    }
+
+    //if email exist
+    const emailExist = await findEmail(email)
+    if(emailExist){
+       if(!emailExist.success) {
+           res.status(emailExist.code).json(emailExist.data)
+       } 
+    }
+    
+    //Confirm Password
+    const user = emailExist 
+    const checkPassword = await bcrypt.compare(password, user.data.password)
+
+    if(user && checkPassword) {
+        const { password, ...others } = user._doc
+        res.status(responsecodes.SUCCESS).json({...others, accessToken: generateToken(user._id, user.isAdmin)})
+    }
+}
+
+const generateToken = (id, isAdmin)=> {
+    return jwt.sign({id, isAdmin}, process.env.JWT_SECRET, {expiresIn: '2d'})
 }
 
 module.exports = {
-    Register
+    Register,
+    Login
 }
