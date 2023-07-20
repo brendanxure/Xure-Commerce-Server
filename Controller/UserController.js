@@ -91,7 +91,8 @@ const GetUser = async (req, res)=> {
         if(!user.success){
             res.status(user.code).json(user.data)
         }
-        res.status(user.code).json(user.data)
+        const { password, ...others } = user._doc
+        res.status(user.code).json(others)
     } catch (error) {
         res.status(error.code).json(error.data)
     }
