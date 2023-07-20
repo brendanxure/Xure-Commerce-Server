@@ -1,5 +1,5 @@
 const { responsecodes } = require("../Constant/ResponseCode")
-const { findEmail, findUsername, createUser } = require("../Service/UserService")
+const { findEmail, findUsername, createUser, findUserById } = require("../Service/UserService")
 const bcrypt = require('bcryptjs')
 const jwt = require('jsonwebtoken')
 
@@ -85,7 +85,20 @@ const generateToken = (id, isAdmin)=> {
     return jwt.sign({id, isAdmin}, process.env.JWT_SECRET, {expiresIn: '2d'})
 }
 
+const GetUser = async (req, res)=> {
+    try {
+        const user =  await findUserById(req.params.id)
+        if(!user.success){
+            res.status(user.code).json(user.data)
+        }
+        res.status(user.code).json(user.data)
+    } catch (error) {
+        res.status(error.code).json(error.data)
+    }
+}
+
 module.exports = {
     Register,
-    Login
+    Login,
+    GetUser
 }

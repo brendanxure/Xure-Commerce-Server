@@ -38,8 +38,21 @@ const createUser = async(email, username, hashedPassword) => {
     }
 }
 
+const findUserById = async(userId)=> {
+    try {
+        const user = await User.findById(userId)
+        if(!user){
+            return {code: responsecodes.NOT_FOUND, success: false, data: 'User not found'}
+        }
+        return {code: responsecodes.SUCCESS, success: true, data: user}
+    } catch (error) {
+        return {code: responsecodes.INTERNAL_SERVER_ERROR, success: false, data: error}
+    }
+}
+
 module.exports = {
     findEmail,
     findUsername,
-    createUser
+    createUser,
+    findUserById
 }
