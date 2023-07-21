@@ -95,17 +95,19 @@ const GetUser = async (req, res)=> {
         const { password, ...others } = user._doc
         res.status(user.code).json(others)
     } catch (error) {
-        res.status(error.code).json(error.data)
+        if(error.code){
+            res.status(error.code).json(error.data)
+        }
+        res.status(responsecodes.INTERNAL_SERVER_ERROR).json(error)
     }
 }
 
 //update user
 const UpdateUser = async(req, res)=> {
-    const {password} = req.body
     try {
-       if(password){
+       if(req.body.password){
         const salt = await bcrypt.genSalt(10)
-        password = await bcrypt.hash(password, salt)
+        req.body.password = await bcrypt.hash(req.body.password, salt)
        }
        const updatedUser = await updateUserById(req.params.id, req.body)
        if(!updatedUser.success){
@@ -114,12 +116,16 @@ const UpdateUser = async(req, res)=> {
     const { password, ...others } = updatedUser._doc
     res.status(updatedUser.code).json(others)
     } catch (error) {
-        res.status(error.code).json(error.data)
+        if(error.code){
+            res.status(error.code).json(error.data)
+        }
+        res.status(responsecodes.INTERNAL_SERVER_ERROR).json(error)
     }
 }
 
 module.exports = {
     Register,
     Login,
-    GetUser
+    GetUser,
+    UpdateUser
 }
