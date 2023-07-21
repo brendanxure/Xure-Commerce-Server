@@ -1,5 +1,5 @@
 const { responsecodes } = require("../Constant/ResponseCode")
-const { findEmail, findUsername, createUser, findUserById } = require("../Service/UserService")
+const { findEmail, findUsername, createUser, findUserById, updateUserById } = require("../Service/UserService")
 const bcrypt = require('bcryptjs')
 const jwt = require('jsonwebtoken')
 
@@ -85,6 +85,7 @@ const generateToken = (id, isAdmin)=> {
     return jwt.sign({id, isAdmin}, process.env.JWT_SECRET, {expiresIn: '2d'})
 }
 
+//get user
 const GetUser = async (req, res)=> {
     try {
         const user =  await findUserById(req.params.id)
@@ -93,6 +94,25 @@ const GetUser = async (req, res)=> {
         }
         const { password, ...others } = user._doc
         res.status(user.code).json(others)
+    } catch (error) {
+        res.status(error.code).json(error.data)
+    }
+}
+
+//update user
+const UpdateUser = async(req, res)=> {
+    const {password} = req.body
+    try {
+       if(password){
+        const salt = await bcrypt.genSalt(10)
+        password = await bcrypt.hash(password, salt)
+       }
+       const updatedUser = await updateUserById(req.params.id, req.body)
+       if(!updatedUser.success){
+        res.status(updatedUser.code).json(updatedUser.data)
+    }
+    const { password, ...others } = updatedUser._doc
+    res.status(updatedUser.code).json(others)
     } catch (error) {
         res.status(error.code).json(error.data)
     }

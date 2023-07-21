@@ -50,9 +50,22 @@ const findUserById = async(userId)=> {
     }
 }
 
+const updateUserById = async(userId, body)=> {
+    try {
+        const updatedUser = await User.findByIdAndUpdate(userId, {$set: body}, {new: true})
+        if(!updatedUser){
+            return {code: responsecodes.NOT_FOUND, success: false, data: 'User not found'}
+        }
+        return {code: responsecodes.SUCCESS, success: true, data: updatedUser}
+    } catch (error) {
+        return {code: responsecodes.INTERNAL_SERVER_ERROR, success: false, data: error}
+    }
+}
+
 module.exports = {
     findEmail,
     findUsername,
     createUser,
-    findUserById
+    findUserById,
+    updateUserById
 }
