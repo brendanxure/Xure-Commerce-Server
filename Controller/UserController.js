@@ -1,5 +1,5 @@
 const { responsecodes } = require("../Constant/ResponseCode")
-const { findEmail, findUsername, createUser, findUserById, updateUserById } = require("../Service/UserService")
+const { findEmail, findUsername, createUser, findUserById, updateUserById, deleteUserById } = require("../Service/UserService")
 const bcrypt = require('bcryptjs')
 const jwt = require('jsonwebtoken')
 
@@ -123,9 +123,25 @@ const UpdateUser = async(req, res)=> {
     }
 }
 
+const DeleteUser = async(req, res)=> {
+    try {
+        const user = await deleteUserById(req.params.id)
+        if(!user.success){
+            res.status(user.code).json(user.data)
+        }
+        res.status(user.code).json(user.data)
+    } catch (error) {
+        if(error.code){
+            res.status(error.code).json(error.data)
+        }
+        res.status(responsecodes.INTERNAL_SERVER_ERROR).json(error)
+    }
+}
+
 module.exports = {
     Register,
     Login,
     GetUser,
-    UpdateUser
+    UpdateUser,
+    DeleteUser
 }

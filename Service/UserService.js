@@ -62,10 +62,23 @@ const updateUserById = async(userId, body)=> {
     }
 }
 
+const deleteUserById = async(userId)=> {
+    try {
+        const user = await User.findByIdAndDelete(userId)
+        if(!user){
+            return {code: responsecodes.NOT_FOUND, success: false, data: 'User not found'}
+        }
+        return {code: responsecodes.SUCCESS, success: true, data: 'User Deleted'}
+    } catch (error) {
+        return {code: responsecodes.INTERNAL_SERVER_ERROR, success: false, data: error}
+    }
+}
+
 module.exports = {
     findEmail,
     findUsername,
     createUser,
     findUserById,
-    updateUserById
+    updateUserById,
+    deleteUserById
 }
