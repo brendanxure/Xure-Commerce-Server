@@ -74,11 +74,24 @@ const deleteUserById = async(userId)=> {
     }
 }
 
+const findAllUser = async(query)=> {
+    try {
+        const users = query ? await User.find().sort({_id: -1}).limit(1) : await User.find()
+        if(!users){
+            return {code: responsecodes.NOT_FOUND, success: false, data: 'No User'}
+        }
+        return {code: responsecodes.SUCCESS, success: true, data: users}
+    } catch (error) {
+        return {code: responsecodes.INTERNAL_SERVER_ERROR, success: false, data: error}
+    }
+}
+
 module.exports = {
     findEmail,
     findUsername,
     createUser,
     findUserById,
     updateUserById,
-    deleteUserById
+    deleteUserById,
+    findAllUser
 }

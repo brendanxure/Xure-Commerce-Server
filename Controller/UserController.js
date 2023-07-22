@@ -1,5 +1,5 @@
 const { responsecodes } = require("../Constant/ResponseCode")
-const { findEmail, findUsername, createUser, findUserById, updateUserById, deleteUserById } = require("../Service/UserService")
+const { findEmail, findUsername, createUser, findUserById, updateUserById, deleteUserById, findAllUser } = require("../Service/UserService")
 const bcrypt = require('bcryptjs')
 const jwt = require('jsonwebtoken')
 
@@ -70,13 +70,14 @@ const Login = async(req, res) => {
            res.status(emailExist.code).json(emailExist.data)
        } 
     }
-    
+   
     //Confirm Password
     const user = emailExist 
     const checkPassword = await bcrypt.compare(password, user.data.password)
 
     if(user && checkPassword) {
-        const { password, ...others } = user._doc
+        console.log(user)
+        const { password, ...others } = user.data._doc
         res.status(responsecodes.SUCCESS).json({...others, accessToken: generateToken(user._id, user.isAdmin)})
     }
 }
@@ -138,10 +139,27 @@ const DeleteUser = async(req, res)=> {
     }
 }
 
+const GetAllUser = async(req, res)=> {
+    const query = req.query.new
+    try {
+        const users = query ? await findAllUser(query) : await findAllUser()
+        if(!users){
+            res.status(users.code).json(users.data)
+        }
+        res.status(users.code).json(users.data)
+    } catch (error) {
+        if(error.code){
+            res.status(error.code).json(error.data)
+        }
+        res.status(responsecodes.INTERNAL_SERVER_ERROR).json(error)
+    }
+}
+
 module.exports = {
     Register,
     Login,
     GetUser,
     UpdateUser,
-    DeleteUser
+    DeleteUser,
+    GetAllUser
 }
