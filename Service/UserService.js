@@ -86,6 +86,34 @@ const findAllUser = async(query)=> {
     }
 }
 
+const findAllUserStat = async()=> {
+    const date = new Date()
+    const lastYear = new Date(date.setFullYear(date.getFullYear() - 1))
+
+    try {
+        const data = await User.aggregate([
+            { $match: { createdAt: {$gte: lastYear}}},
+            {
+                $project: {
+                    month: {$month: "$createdAt"}
+                }
+            },
+            { 
+                $group: {
+                    _id: "$month",
+                    total: {$sum: 1}
+                }
+            }
+        ])
+        if(!data){
+        return {code: responsecodes.NOT_FOUND, success: false, data: 'No Stat found'}  
+        }
+        return {code: responsecodes.SUCCESS, success: true, data: data}
+    } catch (error) {
+        return error
+    }
+}
+
 module.exports = {
     findEmail,
     findUsername,
@@ -93,5 +121,6 @@ module.exports = {
     findUserById,
     updateUserById,
     deleteUserById,
-    findAllUser
+    findAllUser,
+    findAllUserStat
 }
