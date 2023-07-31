@@ -11,6 +11,18 @@ const createProduct = async(title, desc, img, categories, size, color, price)=> 
     }
 }
 
+const updateProductById = async(productId, body)=> {
+    try {
+        const updatedProduct = await Product.findByIdAndUpdate(productId, {$set: body}, {new: true})
+        if(!updatedProduct){
+            return {code: responsecodes.NOT_FOUND, success: false, data: 'Product not found'}
+        }
+        return {code: responsecodes.SUCCESS, success: true, data: updatedProduct}
+    } catch (error) {
+        return error
+    }
+}
+
 const findAllProduct = async()=> {
     try {
         const products = await Product.find()
@@ -23,5 +35,6 @@ const findAllProduct = async()=> {
 
 module.exports = {
     createProduct,
-    findAllProduct
+    findAllProduct,
+    updateProductById
 }
