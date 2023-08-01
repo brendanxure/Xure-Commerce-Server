@@ -14,5 +14,6 @@ app.use(express.urlencoded({extended: false}))
 app.use(cors())
 
 app.use(('/api/user'), require('./Route/UserRoute'))
+app.use(('/api/product'), require('./Route/ProductRoute'))
 
 app.listen(port, ()=> console.log(`server is running on port ${port}`))

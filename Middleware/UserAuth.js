@@ -17,6 +17,7 @@ const validateToken = async (req, res, next) => {
                 }
                 return res
             })
+            console.log(decoded)
 
             //if token token has expired
             if(decoded === 'Token Expired'){

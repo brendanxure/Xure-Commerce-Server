@@ -23,18 +23,55 @@ const updateProductById = async(productId, body)=> {
     }
 }
 
-const findAllProduct = async()=> {
+const deleteProductById = async(productId)=> {
     try {
-        const products = await Product.find()
-        return {code: responsecodes.SUCCESS, success: true, message: 'Product Successfully Created', data: products}
+        const product = await Product.findByIdAndDelete(productId)
+        if(!product){
+            return {code: responsecodes.NOT_FOUND, success: false, data: 'Product not found'}
+        }
+        return {code: responsecodes.SUCCESS, success: true, data: 'Product Deleted'}
+    } catch (error) {
+        return error
+    }
+}
+
+const findProductById = async(productId)=> {
+    try {
+        const product = await Product.findById(productId)
+        if(!product){
+            return {code: responsecodes.NOT_FOUND, success: false, data: 'Product not found'}
+        }
+        return {code: responsecodes.SUCCESS, success: true, data: product}
+    } catch (error) {
+        return error
+    }
+}
+
+const findAllProduct = async(category, query)=> {
+    try {
+        let products;
+        if(!category){
+            products = await Product.find().sort({createdAt: -1}).limit(5)
+        }else if(category){
+            products = await Product.find({categories: {$in: [query]}})
+        } else {
+            products = await Product.find()
+        }
+        if(!products){
+        return {code: responsecodes.NOT_FOUND, success: false, data: 'No Product Found'}
+        }
+        return {code: responsecodes.SUCCESS, success: true, data: products}
     } catch (error) {
         return error   
     }
 }
 
 
+
 module.exports = {
     createProduct,
     findAllProduct,
-    updateProductById
+    updateProductById,
+    deleteProductById,
+    findProductById
 }
