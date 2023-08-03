@@ -23,55 +23,48 @@ const updateCartById = async(cartId, body)=> {
     }
 }
 
-// const deleteProductById = async(productId)=> {
-//     try {
-//         const product = await Product.findByIdAndDelete(productId)
-//         if(!product){
-//             return {code: responsecodes.NOT_FOUND, success: false, data: 'Product not found'}
-//         }
-//         return {code: responsecodes.SUCCESS, success: true, data: 'Product Deleted'}
-//     } catch (error) {
-//         return error
-//     }
-// }
+const deleteCartById = async(cartId)=> {
+    try {
+        const cart = await Cart.findByIdAndDelete(cartId)
+        if(!cart){
+            return {code: responsecodes.NOT_FOUND, success: false, data: 'Cart not found'}
+        }
+        return {code: responsecodes.SUCCESS, success: true, data: 'Cart Deleted'}
+    } catch (error) {
+        return error
+    }
+}
 
-// const findProductById = async(productId)=> {
-//     try {
-//         const product = await Product.findById(productId)
-//         if(!product){
-//             return {code: responsecodes.NOT_FOUND, success: false, data: 'Product not found'}
-//         }
-//         return {code: responsecodes.SUCCESS, success: true, data: product}
-//     } catch (error) {
-//         return error
-//     }
-// }
+const findCartById = async(cartUserId)=> {
+    try {
+        const cart = await Cart.findOne({ userId: cartUserId })
+        if(!cart){
+            return {code: responsecodes.NOT_FOUND, success: false, data: 'Cart not found'}
+        }
+        return {code: responsecodes.SUCCESS, success: true, data: cart}
+    } catch (error) {
+        return error
+    }
+}
 
-// const findAllProduct = async(category, query)=> {
-//     try {
-//         let products;
-//         if(!category){
-//             products = await Product.find().sort({createdAt: -1}).limit(5)
-//         }else if(category){
-//             products = await Product.find({categories: {$in: [query]}})
-//         } else {
-//             products = await Product.find()
-//         }
-//         if(!products){
-//         return {code: responsecodes.NOT_FOUND, success: false, data: 'No Product Found'}
-//         }
-//         return {code: responsecodes.SUCCESS, success: true, data: products}
-//     } catch (error) {
-//         return error   
-//     }
-// }
+const findAllCart = async()=> {
+    try {
+        const carts = await Cart.find()
+        if(!carts){
+        return {code: responsecodes.NOT_FOUND, success: false, data: 'No Cart Found'}
+        }
+        return {code: responsecodes.SUCCESS, success: true, data: carts}
+    } catch (error) {
+        return error   
+    }
+}
 
 
 
 module.exports = {
     createCart,
-    findAllProduct,
+    findAllCart,
     updateCartById,
-    deleteProductById,
-    findProductById
+    deleteCartById,
+    findCartById
 }
