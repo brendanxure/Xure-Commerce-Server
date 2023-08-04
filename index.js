@@ -15,5 +15,6 @@ app.use(cors())
 
 app.use(('/api/user'), require('./Route/UserRoute'))
 app.use(('/api/product'), require('./Route/ProductRoute'))
+app.use(('/api/cart'), require('./Route/CartRoute'))
 
 app.listen(port, ()=> console.log(`server is running on port ${port}`))
