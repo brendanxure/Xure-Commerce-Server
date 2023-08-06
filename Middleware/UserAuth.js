@@ -11,11 +11,11 @@ const validateToken = async (req, res, next) => {
             accessToken = authHeader.split(' ')[1]
 
             // Verify AccessToken
-            const decoded = jwt.verify(accessToken, process.env.JWT_SECRET, (err, res)=>{
+            const decoded = jwt.verify(accessToken, process.env.JWT_SECRET, (err, response)=>{
                 if(err){
                     return 'Token Expired'
                 }
-                return res
+                return response
             })
             console.log(decoded)
 
