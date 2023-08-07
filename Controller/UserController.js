@@ -79,11 +79,13 @@ const Login = async(req, res) => {
         console.log(user)
         const { password, ...others } = user.data._doc
         res.status(responsecodes.SUCCESS).json({...others, accessToken: generateToken(user._id, user.isAdmin)})
+    } else {
+        res.status(responsecodes.NOT_FOUND).json('Incorrect Password')
     }
 }
 
 const generateToken = (id, isAdmin)=> {
-    return jwt.sign({id, isAdmin}, process.env.JWT_SECRET, {expiresIn: '2d'})
+    return jwt.sign({id, isAdmin}, process.env.JWT_SECRET, {expiresIn: 3600})
 }
 
 //get user

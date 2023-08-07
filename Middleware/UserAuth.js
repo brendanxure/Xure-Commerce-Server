@@ -11,8 +11,8 @@ const validateToken = async (req, res, next) => {
             accessToken = authHeader.split(' ')[1]
 
             // Verify AccessToken
-            const decoded = jwt.verify(accessToken, process.env.JWT_SECRET, (err, response)=>{
-                if(err){
+            const decoded = jwt.verify(accessToken, process.env.JWT_SECRET, (err, response)=> {
+                if (err) {
                     return 'Token Expired'
                 }
                 return response
@@ -20,7 +20,7 @@ const validateToken = async (req, res, next) => {
             console.log(decoded)
 
             //if token token has expired
-            if(decoded === 'Token Expired'){
+            if (decoded === 'Token Expired') {
                 res.status(401).json('Token Expired')
             }
 
