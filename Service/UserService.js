@@ -5,7 +5,7 @@ const findEmail = async(email) => {
     try {
         const matchedEmail = await User.findOne({email: email})
         if(!matchedEmail){
-            return {code: responsecodes.NOT_FOUND, success: false, data: {errormessage: 'Email not found'}}
+            return {code: responsecodes.NOT_FOUND, success: false, data: 'Email not found'}
         }
         return {code: responsecodes.SUCCESS, success: true, data: matchedEmail}
     } catch (error) {

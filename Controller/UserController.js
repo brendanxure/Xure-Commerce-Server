@@ -74,6 +74,9 @@ const Login = async(req, res) => {
     //Confirm Password
     const user = emailExist 
     const checkPassword = await bcrypt.compare(password, user.data.password)
+    if(!checkPassword){
+        res.status(responsecodes.NOT_FOUND).json("Email and Password not registered")
+    }
 
     if(user && checkPassword) {
         console.log(user)
