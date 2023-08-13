@@ -17,7 +17,7 @@ const findUsername = async(username)=> {
     try {
         const matchedUsername = await User.findOne({username: username})
         if(!matchedUsername){
-            return {code: responsecodes.NOT_FOUND, success: false, data: {errormessage: 'Username not found'}}
+            return {code: responsecodes.NOT_FOUND, success: false, data: 'Username not found'}
         }
         return {code: responsecodes.SUCCESS, success: true, data: matchedUsername}
     } catch (error) {
