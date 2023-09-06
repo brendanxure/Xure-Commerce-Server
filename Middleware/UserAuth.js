@@ -1,4 +1,5 @@
-const jwt = require('jsonwebtoken')
+const jwt = require('jsonwebtoken');
+const { responsecodes } = require('../Constant/ResponseCode');
 const User = require('../Model/User')
 
 const validateToken = async (req, res, next) => {
@@ -13,15 +14,17 @@ const validateToken = async (req, res, next) => {
             // Verify AccessToken
             const decoded = jwt.verify(accessToken, process.env.JWT_SECRET, (err, response)=> {
                 if (err) {
-                    return 'Token Expired'
+                    return err
                 }
                 return response
             })
             console.log(decoded)
 
             //if token token has expired
-            if (decoded === 'Token Expired') {
-                res.status(401).json('Token Expired')
+            if (decoded.message === 'invalid signature') {
+                return res.status(responsecodes.UNAUTHORIZED).json('Invalid Code, Unauthorized')
+            } else if (decoded.message === 'jwt expired') {
+                return res.status(responsecodes.UNAUTHORIZED).json('Token has expired, Please try again')
             }
 
             // Get User from the AccessToken

@@ -55,19 +55,20 @@ const Login = async(req, res) => {
 
     //no  email 
     if(!email) {
-        res.status(responsecodes.BAD_REQUEST).json('Please input email')
+        return res.status(responsecodes.BAD_REQUEST).json('Please input email')
     }
 
     //no password
     if(!password){
-        res.status(responsecodes.BAD_REQUEST).json('Please input password')
+        return res.status(responsecodes.BAD_REQUEST).json('Please input password')
     }
 
-    //if email exist
+    try {
+        //if email exist
     const emailExist = await findEmail(email)
     if(emailExist){
        if(!emailExist.success) {
-           res.status(emailExist.code).json(emailExist.data)
+           return res.status(emailExist.code).json(emailExist.data)
        } 
     }
    
@@ -75,15 +76,18 @@ const Login = async(req, res) => {
     const user = emailExist 
     const checkPassword = await bcrypt.compare(password, user.data.password)
     if(!checkPassword){
-        res.status(responsecodes.NOT_FOUND).json("Email and Password not registered")
+        return res.status(responsecodes.NOT_FOUND).json("Email and Password not registered")
     }
 
     if(user && checkPassword) {
         console.log(user)
         const { password, ...others } = user.data._doc
-        res.status(responsecodes.SUCCESS).json({...others, accessToken: generateToken(user._id, user.isAdmin)})
+        return res.status(responsecodes.SUCCESS).json({...others, accessToken: generateToken(user._id, user.isAdmin)})
     } else {
-        res.status(responsecodes.NOT_FOUND).json('Incorrect Password')
+        return res.status(responsecodes.NOT_FOUND).json('Incorrect Password')
+    }
+    } catch (error) {
+        res.status(responsecodes.INTERNAL_SERVER_ERROR).json('error occured logging in ' + error)
     }
 }
 
