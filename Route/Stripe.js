@@ -1,3 +1,8 @@
+const { InitializeStripe } = require('../Controller/StripeController')
+
 const router = require('express').Router()
 
-module.exports = router
+
+router.post("/payment", InitializeStripe)
+
+module.exports = router 
