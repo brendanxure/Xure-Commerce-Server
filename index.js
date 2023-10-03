@@ -17,5 +17,6 @@ app.use(('/api/user'), require('./Route/UserRoute'))
 app.use(('/api/product'), require('./Route/ProductRoute'))
 app.use(('/api/cart'), require('./Route/CartRoute'))
 app.use(('/api/order'), require('./Route/OrderRoute'))
+app.use(('/api/payment'), require('./Route/PaymentRoute'))
 
 app.listen(port, ()=> console.log(`server is running on port ${port}`))
