@@ -30,7 +30,7 @@ const validateToken = async (req, res, next) => {
             // Get User from the AccessToken
             const user = await User.findById(decoded.id).select('-password')
             if (!user) {
-                res.status(400).json('Token is invalid')
+                return res.status(400).json('Token is invalid')
             }
             req.user = user;
 
@@ -38,12 +38,12 @@ const validateToken = async (req, res, next) => {
 
         } catch (error) {
 
-            res.status(400).json('Not authorized because ' + error)
+           return res.status(400).json('Not authorized because ' + error)
         }
     }
 
     if (!accessToken) {
-        res.status(401).json('Not authorized, no Access Token')
+        return res.status(401).json('Not authorized, no Access Token')
     }
 }
 
@@ -52,7 +52,7 @@ const validateTokenForAdmin = (req, res, next) => {
         if (req.user.isAdmin) {
             next()
         } else {
-            res.status(401).json("You are not authorized, Not an admin")
+            return res.status(401).json("You are not authorized, Not an admin")
         }
     })
 }
