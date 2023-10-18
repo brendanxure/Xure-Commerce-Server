@@ -51,7 +51,7 @@ const findAllProduct = async(category, query)=> {
     try {
         let products;
         if(!category){
-            products = await Product.find().sort({createdAt: -1}).limit(5)
+            products = await Product.find().sort({createdAt: -1}).limit(8)
         }else if(category){
             products = await Product.find({categories: {$in: [query]}})
         } else {
