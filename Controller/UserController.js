@@ -6,7 +6,7 @@ const jwt = require('jsonwebtoken')
 const Register = async( req, res) => {
     const {email, username, password} = req.body
 
-    console.log(req.body)
+    
     //no email
     if(!email) {
         res.status(responsecodes.BAD_REQUEST).json('Email is required')
