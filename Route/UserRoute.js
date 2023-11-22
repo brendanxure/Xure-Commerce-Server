@@ -10,6 +10,6 @@ router.get(('/find/:id'), validateTokenForAdmin, GetUser)
 router.put(('/update-user/:id'), validateToken, UpdateUser)
 router.delete(('/delete-user/:id'), validateToken, DeleteUser)
 router.get('/users', GetAllUser)
-router.get('/user-stats', validateTokenForAdmin, GetAllUserStat)
+router.get('/user-stats', GetAllUserStat)
 
 module.exports = router

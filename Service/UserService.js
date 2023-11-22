@@ -76,7 +76,7 @@ const deleteUserById = async(userId)=> {
 
 const findAllUser = async(query)=> {
     try {
-        const users = query ? await User.find().sort({_id: -1}).limit(1) : await User.find()
+        const users = query ? await User.find().sort({_id: -1}).limit(2) : await User.find()
         if(!users){
             return {code: responsecodes.NOT_FOUND, success: false, data: 'No User'}
         }
@@ -108,7 +108,7 @@ const findAllUserStat = async()=> {
         if(!data){
         return {code: responsecodes.NOT_FOUND, success: false, data: 'No Stat found'}  
         }
-        return {code: responsecodes.SUCCESS, success: true, data: data}
+        return {code: responsecodes.SUCCESS, success: true, data: data.sort((a, b)=> a._id - b._id)}
     } catch (error) {
         return error
     }

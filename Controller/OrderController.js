@@ -4,10 +4,10 @@ const { createOrder, updateOrderById, deleteOrderById, findOrderByUser, findAllO
 
 //Create new Order
 const postOrder = async(req, res)=> {
-    const {userId, products, amount, address, status} = req.body
-
+    const {userId, products, total, address, status} = req.body
+    console.log(req.body)
     try {
-        const order = await createOrder(userId, products, amount, address, status)
+        const order = await createOrder(userId, products, total, address, status)
         res.status(order.code).json(order.data)
     } catch (error) {
         res.status(responsecodes.INTERNAL_SERVER_ERROR).json(error)

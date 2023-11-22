@@ -2,9 +2,9 @@ const { responsecodes } = require("../Constant/ResponseCode")
 const Order = require("../Model/Order")
 
 
-const createOrder = async(userId, products, amount, address, status)=> {
+const createOrder = async(userId, products, total, address, status)=> {
     try {
-        const order = await Order.create({userId, products, amount, address, status})
+        const order = await Order.create({userId, products, amount: total, address, status})
         return {code: responsecodes.SUCCESS, success: true, message: 'Order Successfully Created', data: order}
     } catch (error) {
         return error
@@ -62,7 +62,7 @@ const findAllOrder = async()=> {
 const findMonthlyIncome = async()=> {
     const date = new Date()
     const lastMonth = new Date(date.setMonth(date.getMonth()- 1))
-    // const previousMonth = new Date(date.setMonth(date.getMonth()- 2))
+    // const previousMonth = new Date(date.setMonth(date.getMonth()- 1))
    const previousMonth =  new Date(date.setMonth(lastMonth.getMonth()- 1))
 
     try {
