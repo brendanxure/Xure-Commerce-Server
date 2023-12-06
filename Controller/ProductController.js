@@ -62,6 +62,7 @@ const getAllProduct = async(req, res)=> {
         let products;
         if(qNew) {
             products = await findAllProduct(!category, qNew)
+            console.log(products)
         } else if(qCategory){
             products = await findAllProduct(category, qCategory)
         } else {
