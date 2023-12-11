@@ -5,7 +5,7 @@ const { createCart, updateCartById, deleteCartById, findAllCart } = require("../
 //Create new Cart
 const postCart = async(req, res)=> {
     const {userId, products} = req.body
-
+    console.log(req.body)
     try {
         const cart = await createCart(userId, products)
         res.status(cart.code).json(cart.data)
